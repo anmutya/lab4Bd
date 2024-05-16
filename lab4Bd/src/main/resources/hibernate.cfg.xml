@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this template
+-->
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection properties -->
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://ep-holy-frog-a5jbg2mc.us-east-2.aws.neon.tech/lab4</property>
+        <property name="hibernate.connection.username">lab4_owner</property>
+        <property name="hibernate.connection.password">pnqHJEd50Zfe</property>
+
+        <!-- Other Hibernate properties -->
+        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.format_sql">false</property>
+        <property name="hibernate.jdbc.batch_size">200</property>
+        <property name="hibernate.order_inserts">true</property>
+        <property name="hibernate.order_updates">true</property>
+
+
+        <!-- first time it is create and then onwards update -->
+        <property name="hbm2ddl.auto">update</property>
+
+
+
+    </session-factory>
+</hibernate-configuration>
