@@ -21,7 +21,7 @@ import java.util.List;
 public class Countries {
      @Id
     private Integer id;
-    @Column(name = "name")
+    @Column
     private String name;
 
     public List<Reactors> getReactors() {

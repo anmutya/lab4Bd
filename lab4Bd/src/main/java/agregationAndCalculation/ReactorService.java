@@ -24,9 +24,6 @@ public class ReactorService {
             energyByCountryAndYear.put(country.getName(), energyForCountry);
         }
         Map<String, Map<Integer, Double>> sortedMapByYear = sortedMapByYear(energyByCountryAndYear);
-        sortedMapByYear.forEach((country, yearToEnergy)
-                -> yearToEnergy.forEach((year, energy)
-                        -> System.out.println("Country: " + country + ", Year: " + year + ", Energy: " + energy)));
         return sortedMapByYear;
     }
 
@@ -56,10 +53,7 @@ public class ReactorService {
             }
         }
         Map<String, Map<Integer, Double>> sortedMapByYear = sortedMapByYear(energyByCountryAndYear);
-        sortedMapByYear.forEach((region, yearToEnergy)
-                -> yearToEnergy.forEach((year, energy)
-                        -> System.out.println("Region: " + region + ", Year: " + year + ", Energy: " + energy)));
-        return energyByCountryAndYear;
+        return sortedMapByYear;
     }
 
     public Map<String, Map<Integer, Double>> calculateReactorEnergyByOperator() {
@@ -72,9 +66,6 @@ public class ReactorService {
             energyByCountryAndYear.put(operator.getName(), energyForCountry);
         }
         Map<String, Map<Integer, Double>> sortedMapByYear = sortedMapByYear(energyByCountryAndYear);
-        sortedMapByYear.forEach((operator, yearToEnergy)
-                -> yearToEnergy.forEach((year, energy)
-                -> System.out.println("Operator: " + operator + ", Year: " + year + ", Energy: " + energy)));
         return sortedMapByYear;
     }
 
@@ -93,9 +84,6 @@ public class ReactorService {
             energyByCountryAndYear.put(owner.getName(), energyForOwner);
         }
         Map<String, Map<Integer, Double>> sortedMapByYear = sortedMapByYear(energyByCountryAndYear);
-        sortedMapByYear.forEach((owner, yearToEnergy)
-                -> yearToEnergy.forEach((year, energy)
-                -> System.out.println("Owner: " + owner + ", Year: " + year + ", Energy: " + energy)));
         return sortedMapByYear;
     }
 }

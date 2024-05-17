@@ -2,11 +2,6 @@ package agregationAndCalculation;
 
 import entities.Kium;
 import entities.Reactors;
-import entities.*;
-import org.springframework.stereotype.Service;
-import reactor.Reactor;
-import reactor.ReactorStorage;
-import reader.JsonReader;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +36,7 @@ public class EnergyCalculator {
                 energyForMissingYears = calculateEnergyForMissinigYears(reactor);
                 energyForKnownYears.forEach((key, value) -> totalEnergyByYear.merge(key, value, Double::sum));
                 energyForMissingYears.forEach((key, value) -> totalEnergyByYear.merge(key, value, Double::sum));
+                reactor.setEnergyByYear((HashMap<Integer, Double>) totalEnergyByYear);
             } else {
                 energyForKnownYears = reactor.getEnergyByYear();
                 energyForKnownYears.forEach((key, value) -> totalEnergyByYear.merge(key, value, Double::sum));
@@ -72,41 +68,47 @@ public class EnergyCalculator {
 
     private double findBurnup(Reactors reactors) {
         HashMap<String, ArrayList<Reactor>> reactorStorage = ReactorStorage.INSTANCE.getReactors();
-        Set<String> keySet = reactorStorage.keySet();
-        String keyAtIndex0 = (String) keySet.toArray()[0];
-        ArrayList<Reactor> reactorListAtIndex0 = reactorStorage.get(keyAtIndex0);
         double burnup = 0;
-        for (Reactor reactor : reactorListAtIndex0) {
-            if (Objects.equals(reactor.getType(), reactors.getType())) {
-                burnup = reactor.getBurnup();
-            } else if (Objects.equals(reactors.getType(), "LWGR") && Objects.equals(reactor.getType(), "RBMK")) {
-                burnup = reactor.getBurnup();
-            } else if (Objects.equals(reactors.getType(), "GCR") && Objects.equals(reactor.getType(), "MAGNOX")) {
-                burnup = reactor.getBurnup();
-            } else if (Objects.equals(reactors.getType(), "FBR") && Objects.equals(reactor.getType(), "BN")) {
-                burnup = reactor.getBurnup();
+        if(reactors.getEnergyByYear().isEmpty()){
+            Set<String> keySet = reactorStorage.keySet();
+            String keyAtIndex0 = (String) keySet.toArray()[0];
+            ArrayList<Reactor> reactorListAtIndex0 = reactorStorage.get(keyAtIndex0);
+            for (Reactor reactor : reactorListAtIndex0) {
+                if (Objects.equals(reactor.getType(), reactors.getType())) {
+                    burnup = reactor.getBurnup();
+                } else if (Objects.equals(reactors.getType(), "LWGR") && Objects.equals(reactor.getType(), "RBMK")) {
+                    burnup = reactor.getBurnup();
+                } else if (Objects.equals(reactors.getType(), "GCR") && Objects.equals(reactor.getType(), "MAGNOX")) {
+                    burnup = reactor.getBurnup();
+                } else if (Objects.equals(reactors.getType(), "FBR") && Objects.equals(reactor.getType(), "BN")) {
+                    burnup = reactor.getBurnup();
+                }
             }
         }
+
         return burnup;
     }
 
     private double findFirstLoad(Reactors reactors) {
         double firstLoad = 0;
         HashMap<String, ArrayList<Reactor>> reactorStorage = ReactorStorage.INSTANCE.getReactors();
-        Set<String> keySet = reactorStorage.keySet();
-        String keyAtIndex0 = (String) keySet.toArray()[0];
-        ArrayList<Reactor> reactorListAtIndex0 = reactorStorage.get(keyAtIndex0);
-        for (Reactor reactor : reactorListAtIndex0) {
-            if (Objects.equals(reactor.getType(), reactors.getType())) {
-                firstLoad = reactor.getFirstLoad();
-            } else if (Objects.equals(reactors.getType(), "LWGR") && Objects.equals(reactor.getType(), "RBMK")) {
-                firstLoad = reactor.getFirstLoad();
-            } else if (Objects.equals(reactors.getType(), "GCR") && Objects.equals(reactor.getType(), "MAGNOX")) {
-                firstLoad = reactor.getFirstLoad();
-            } else if (Objects.equals(reactors.getType(), "FBR") && Objects.equals(reactor.getType(), "BN")) {
-                firstLoad = reactor.getFirstLoad();
+        if(reactors.getEnergyByYear().isEmpty()){
+            Set<String> keySet = reactorStorage.keySet();
+            String keyAtIndex0 = (String) keySet.toArray()[0];
+            ArrayList<Reactor> reactorListAtIndex0 = reactorStorage.get(keyAtIndex0);
+            for (Reactor reactor : reactorListAtIndex0) {
+                if (Objects.equals(reactor.getType(), reactors.getType())) {
+                    firstLoad = reactor.getFirstLoad();
+                } else if (Objects.equals(reactors.getType(), "LWGR") && Objects.equals(reactor.getType(), "RBMK")) {
+                    firstLoad = reactor.getFirstLoad();
+                } else if (Objects.equals(reactors.getType(), "GCR") && Objects.equals(reactor.getType(), "MAGNOX")) {
+                    firstLoad = reactor.getFirstLoad();
+                } else if (Objects.equals(reactors.getType(), "FBR") && Objects.equals(reactor.getType(), "BN")) {
+                    firstLoad = reactor.getFirstLoad();
+                }
             }
         }
+
         return firstLoad;
     }
 

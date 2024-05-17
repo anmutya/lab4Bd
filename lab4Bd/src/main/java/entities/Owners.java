@@ -23,9 +23,6 @@ public class Owners {
     @Column(name = "name")
     private String name;
 
-//    public List<Reactors> getReactors() {
-//        return reactors;
-//    }
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     private List<OwnersAndReactors> ownersAndReactors;
 
@@ -36,9 +33,6 @@ public class Owners {
     public List<OwnersAndReactors> getOwnersAndReactors() {
         return ownersAndReactors;
     }
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
-//    private List<Reactors> reactors;
-
     public Integer getId() {
         return id;
     }

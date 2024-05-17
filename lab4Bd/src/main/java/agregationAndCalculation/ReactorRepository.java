@@ -6,7 +6,7 @@ import org.hibernate.query.Query;
 import java.util.ArrayList;
 
 public class ReactorRepository {
-    private Session session;
+    private static Session session;
 
     public ReactorRepository(Session session) {
         this.session = session;
@@ -46,9 +46,9 @@ public class ReactorRepository {
     }
     public ArrayList<Owners> findReactorsByOwner() {
         ArrayList<Owners> owners = new ArrayList<>();
-        String hql = "SELECT ow " +
-                "FROM Owners ow "+
-                "inner join ow.ownersAndReactors";
+        String hql = "SELECT o " +
+                "FROM Owners o "+
+                "inner join o.ownersAndReactors";
         Query<Object[]> query = session.createQuery(hql, Object[].class);
         for (Object[] row : query.list()) {
             owners.add((Owners) row[0]);
