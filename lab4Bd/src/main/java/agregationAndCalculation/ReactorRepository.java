@@ -4,18 +4,15 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ReactorRepository {
-    private final Session session;
+    private Session session;
 
     public ReactorRepository(Session session) {
         this.session = session;
     }
 
-    public ArrayList<Countries> findReactorsEnergyByCountries() {
+    public ArrayList<Countries> findReactorsByCountries() {
         ArrayList<Countries> countries = new ArrayList<>();
         String hql = "SELECT c " +
                 "FROM Countries c";
@@ -26,7 +23,7 @@ public class ReactorRepository {
         return countries;
     }
 
-    public ArrayList<Regions> findReactorsEnergyByRegions() {
+    public ArrayList<Regions> findReactorsByRegions() {
         ArrayList<Regions> regions = new ArrayList<>();
         String hql = "SELECT r " +
                 "FROM Regions r";

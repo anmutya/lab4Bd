@@ -16,7 +16,7 @@ public class ReactorService {
     }
     public Map<String, Map<Integer, Double>> calculateReactorEnergyByCountryAndYear() {
         EnergyCalculator energyCalculator = new EnergyCalculator();
-        ArrayList<Countries> results = reactorRepository.findReactorsEnergyByCountries();
+        ArrayList<Countries> results = reactorRepository.findReactorsByCountries();
         Map<String, Map<Integer, Double>> energyByCountryAndYear = new HashMap<>();
         for (Countries country : results) {
             List<Reactors> reactors = country.getReactors();
@@ -45,7 +45,7 @@ public class ReactorService {
 
     public Map<String, Map<Integer, Double>> calculateReactorEnergyByRegionAndYear() {
          EnergyCalculator energyCalculator = new EnergyCalculator();
-        ArrayList<Regions> results = reactorRepository.findReactorsEnergyByRegions();
+        ArrayList<Regions> results = reactorRepository.findReactorsByRegions();
         Map<String, Map<Integer, Double>> energyByCountryAndYear = new HashMap<>();
         for (Regions region : results) {
             List<Countries> countries = region.getCountries();

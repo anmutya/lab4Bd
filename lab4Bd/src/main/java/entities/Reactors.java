@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 public class Reactors {
@@ -33,10 +32,6 @@ public class Reactors {
         this.energyByYear = energyByYear;
     }
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "owner_id")
-//    private Owners owner;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operator_id")
     private Operators operator;
@@ -51,13 +46,6 @@ public class Reactors {
     @JoinColumn(name = "country_id")
     private Countries country;
 
-//    public Owners getOwner() {
-//        return owner;
-//    }
-//
-//    public void setOwner(Owners owner) {
-//        this.owner = owner;
-//    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reactor")
     private List<Kium> kiums;
@@ -151,7 +139,6 @@ public class Reactors {
         try {
             this.firstGridConnection = Date.valueOf(firstGridConnection);
         } catch (IllegalArgumentException e) {
-//            Logger.getLogger("reactors").log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -163,7 +150,6 @@ public class Reactors {
         try {
             this.shutdownDate = Date.valueOf(shutdownDate);
         } catch (IllegalArgumentException e) {
-//            Logger.getLogger("reactors").log(Level.WARNING, e.getMessage());
         }
     }
 

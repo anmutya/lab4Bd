@@ -24,7 +24,7 @@ public class TableBuilder {
         return model;
     }
 
-    public DefaultTableModel createTableForCounry(Map<String, Map<Integer, Double>> result) {
+    public DefaultTableModel createTableForCountry(Map<String, Map<Integer, Double>> result) {
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Страна");
         tableModel.addColumn("Год");

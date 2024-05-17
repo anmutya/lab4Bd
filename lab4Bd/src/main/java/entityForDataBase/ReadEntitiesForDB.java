@@ -24,7 +24,7 @@ public class ReadEntitiesForDB {
 
     private String path = Objects.requireNonNull(getClass().getClassLoader().getResource("reactors2.xlsx")).getPath();
 
-    public ArrayList<Reactors> readReactorsForExcel() throws IOException {
+    public ArrayList<Reactors> readReactorsFromExcel() throws IOException {
         ArrayList<Reactors> reactors = new ArrayList<>();
         String nameSheet = "reactor";
         DataFormatter formatter = new DataFormatter();
@@ -69,7 +69,7 @@ public class ReadEntitiesForDB {
 
     }
 
-    public ArrayList<Operators> readOperatorsForExcel() {
+    public ArrayList<Operators> readOperatorsFromExcel() {
         ArrayList<Operators> operatorses = new ArrayList();
         String nameSheet = "operators";
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
@@ -90,7 +90,7 @@ public class ReadEntitiesForDB {
         return operatorses;
     }
 
-    public ArrayList<Owners> readOwnersForExcel() {
+    public ArrayList<Owners> readOwnersFromExcel() {
         ArrayList<Owners> owners = new ArrayList();
         String nameSheet = "owners";
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
@@ -111,7 +111,7 @@ public class ReadEntitiesForDB {
         return owners;
     }
 
-    public ArrayList<Regions> readRegionsForExcel() {
+    public ArrayList<Regions> readRegionsFromExcel() {
         ArrayList<Regions> regions = new ArrayList();
         String nameSheet = "regions";
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
@@ -131,7 +131,7 @@ public class ReadEntitiesForDB {
         }
         return regions;
     }
-public ArrayList<OwnersAndReactors> readOwnersAndReactorsForExcel() {
+public ArrayList<OwnersAndReactors> readOwnersAndReactorsFromExcel() {
         ArrayList<OwnersAndReactors> owners = new ArrayList();
         String nameSheet = "ownersAndReactors";
     try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
@@ -160,7 +160,7 @@ public ArrayList<OwnersAndReactors> readOwnersAndReactorsForExcel() {
     }
     return owners;
 }
-    public ArrayList<Countries> readCountriesForExcel() {
+    public ArrayList<Countries> readCountriesFromExcel() {
         ArrayList<Countries> countries = new ArrayList();
         String nameSheet = "countries";
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
@@ -187,7 +187,7 @@ public ArrayList<OwnersAndReactors> readOwnersAndReactorsForExcel() {
         return countries;
     }
 
-    public ArrayList<Status> readStatusForExcel() {
+    public ArrayList<Status> readStatusFromExcel() {
         ArrayList<Status> statuses = new ArrayList();
         String nameSheet = "status";
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
@@ -208,7 +208,7 @@ public ArrayList<OwnersAndReactors> readOwnersAndReactorsForExcel() {
         return statuses;
     }
 
-    public ArrayList<Kium> readKiumForExcel() {
+    public ArrayList<Kium> readKiumFromExcel() {
         ArrayList<Kium> kiums = new ArrayList();
         String nameSheet = "kium";
         try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {

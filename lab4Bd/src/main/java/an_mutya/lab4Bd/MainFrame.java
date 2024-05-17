@@ -294,7 +294,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void buttonAgredationByCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAgredationByCountryActionPerformed
         try {
             DefaultTableModel model = new DefaultTableModel();
-            model = manager.createTableForCounry();
+            model = manager.createTableForCountry();
             tableResultAgregation.setModel(model);
             validate();
         } catch (ArrayIndexOutOfBoundsException e) {
