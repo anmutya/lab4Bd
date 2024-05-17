@@ -1,13 +1,6 @@
 package entityForDataBase;
 
-
-import entities.Countries;
-import entities.Kium;
-import entities.Operators;
-import entities.Owners;
-import entities.Reactors;
-import entities.Regions;
-import entities.Status;
+import entities.*;
 import org.hibernate.Session;
 
 import java.sql.SQLException;
@@ -16,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ExportEntitiesToDB {
+
     public ExportEntitiesToDB() {
     }
 
@@ -31,6 +25,14 @@ public class ExportEntitiesToDB {
     public void extortOwnersToDB(Session session, ArrayList<Owners> owners) {
         session.beginTransaction();
         for (Owners owner : owners) {
+            session.persist(owner);
+        }
+        session.flush();
+        session.getTransaction().commit();
+    }
+    public void extortOwnersAndReactorsToDB(Session session, ArrayList<OwnersAndReactors> owners) {
+        session.beginTransaction();
+        for (OwnersAndReactors owner : owners) {
             session.persist(owner);
         }
         session.flush();
@@ -75,18 +77,10 @@ public class ExportEntitiesToDB {
 
     public void extortKiumsToDB(Session session, ArrayList<Kium> kiums) throws SQLException {
         session.beginTransaction();
-        int count = 0;
         for (Kium kium : kiums) {
             session.persist(kium);
-            count++;
-            if (count % 25 == 0) {
-                session.flush();
-                session.clear();
-                Logger.getGlobal().log(Level.INFO, "Write " + count + " rows");
-            }
         }
         session.flush();
-        session.clear();
         session.getTransaction().commit();
     }
 

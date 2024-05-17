@@ -1,14 +1,10 @@
 package entityForDataBase;
 
-import entities.Countries;
-import entities.Kium;
-import entities.Operators;
-import entities.Owners;
-import entities.Reactors;
-import entities.Regions;
-import entities.Status;
+import entities.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -26,7 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class ReadEntitiesForDB {
 
-    private String path = getClass().getClassLoader().getResource("reactors_details.xlsx").getPath();
+    private String path = Objects.requireNonNull(getClass().getClassLoader().getResource("reactors2.xlsx")).getPath();
 
     public ArrayList<Reactors> readReactorsForExcel() throws IOException {
         ArrayList<Reactors> reactors = new ArrayList<>();
@@ -48,24 +44,18 @@ public class ReadEntitiesForDB {
                     status.setId(Integer.valueOf(statusId));
                     reactor.setStatus(status);
                 }
-                int ownerId = (int) (row.getCell(5).getNumericCellValue());
-                if (ownerId != 0) {
-                    Owners owner = new Owners();
-                    owner.setId(Integer.valueOf(ownerId));
-                    reactor.setOwner(owner);
-                }
-                int operatorId = (int) (row.getCell(6).getNumericCellValue());
+                int operatorId = (int) (row.getCell(5).getNumericCellValue());
                 if (operatorId != 0) {
                     Operators operator = new Operators();
                     operator.setId(Integer.valueOf(operatorId));
                     reactor.setOperator(operator);
                 }
-                cellValue = formatter.formatCellValue(row.getCell(7));
+                cellValue = formatter.formatCellValue(row.getCell(6));
                 reactor.setThermalCapacity(Integer.valueOf(cellValue));
-                reactor.setFirstGridConnection(row.getCell(8).getStringCellValue());
-                reactor.setShutdownDate(row.getCell(9).getStringCellValue());
+                reactor.setFirstGridConnection(row.getCell(7).getStringCellValue());
+                reactor.setShutdownDate(row.getCell(8).getStringCellValue());
 
-                int countryId = (int) (row.getCell(10).getNumericCellValue());
+                int countryId = (int) (row.getCell(9).getNumericCellValue());
                 if (countryId != 0) {
                     Countries country = new Countries();
                     country.setId(Integer.valueOf(countryId));
@@ -141,7 +131,35 @@ public class ReadEntitiesForDB {
         }
         return regions;
     }
-
+public ArrayList<OwnersAndReactors> readOwnersAndReactorsForExcel() {
+        ArrayList<OwnersAndReactors> owners = new ArrayList();
+        String nameSheet = "ownersAndReactors";
+    try (XSSFWorkbook myExcelFWorkbook = new XSSFWorkbook(path)) {
+        DataFormatter formatter = new DataFormatter();
+        XSSFSheet myExcelSheet = myExcelFWorkbook.getSheet(nameSheet);
+        for (int i = 1; i <= myExcelSheet.getLastRowNum(); i++) {
+            OwnersAndReactors ownersAndReactors = new OwnersAndReactors();
+            Row row = myExcelSheet.getRow(i);
+            int reactorId = (int) (row.getCell(0).getNumericCellValue());
+            if (reactorId != 0) {
+                Reactors reactors = new Reactors();
+                reactors.setId(Integer.valueOf(reactorId));
+                ownersAndReactors.setReactor(reactors);
+            }
+            int ownerId = (int) (row.getCell(1).getNumericCellValue());
+            if (ownerId != 0) {
+                Owners owner = new Owners();
+                owner.setId(Integer.valueOf(ownerId));
+                ownersAndReactors.setOwner(owner);
+            }
+            owners.add(ownersAndReactors);
+        }
+        myExcelFWorkbook.close();
+    } catch (IOException ex) {
+        Logger.getLogger(ReadEntitiesForDB.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    return owners;
+}
     public ArrayList<Countries> readCountriesForExcel() {
         ArrayList<Countries> countries = new ArrayList();
         String nameSheet = "countries";

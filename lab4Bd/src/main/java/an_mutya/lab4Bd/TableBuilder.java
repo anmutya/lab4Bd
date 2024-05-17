@@ -12,58 +12,48 @@ import javax.swing.table.DefaultTableModel;
  * @author annamutovkina
  */
 public class TableBuilder {
+    private DefaultTableModel createRows(DefaultTableModel model ,Map<String, Map<Integer, Double>> result ){
+        for (Map.Entry<String, Map<Integer, Double>> entry : result.entrySet()) {
+            String country = entry.getKey();
+            Map<Integer, Double> dataByYear = entry.getValue();
+            for (Map.Entry<Integer, Double> yearData : dataByYear.entrySet()) {
+                Object[] rowData = {country, yearData.getKey(), yearData.getValue()};
+                model.addRow(rowData);
+            }
+        }
+        return model;
+    }
 
-    public DefaultTableModel createTableFromCounry(Map<String, Map<Integer, Double>> result) {
+    public DefaultTableModel createTableForCounry(Map<String, Map<Integer, Double>> result) {
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Страна");
         tableModel.addColumn("Год");
         tableModel.addColumn("Объем ежегодного потребления, т.");
 
-        for (Map.Entry<String, Map<Integer, Double>> entry : result.entrySet()) {
-            String country = entry.getKey();
-            Map<Integer, Double> dataByYear = entry.getValue();
-            for (Map.Entry<Integer, Double> yearData : dataByYear.entrySet()) {
-                Object[] rowData = {country, yearData.getKey(), yearData.getValue()};
-                tableModel.addRow(rowData);
-            }
-        }
-        return tableModel;
+        return createRows(tableModel,result);
     }
-        public DefaultTableModel createTableFromRegion(Map<String, Map<Integer, Double>> result) {
+        public DefaultTableModel createTableForRegion(Map<String, Map<Integer, Double>> result) {
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Регион");
         tableModel.addColumn("Год");
         tableModel.addColumn("Объем ежегодного потребления, т.");
-
-        for (Map.Entry<String, Map<Integer, Double>> entry : result.entrySet()) {
-            String country = entry.getKey();
-            Map<Integer, Double> dataByYear = entry.getValue();
-            for (Map.Entry<Integer, Double> yearData : dataByYear.entrySet()) {
-                Object[] rowData = {country, yearData.getKey(), yearData.getValue()};
-                tableModel.addRow(rowData);
-            }
-        }
-        return tableModel;
+        return createRows(tableModel,result);
     }
-        
-    public DefaultTableModel createTableFromOwnersAndOperators( Map<String, Map<String, Map<Integer, Double>>> result) {
+    public DefaultTableModel createTableForOperator(Map<String, Map<Integer, Double>> result) {
         DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.addColumn("Владелец");
         tableModel.addColumn("Оператор");
         tableModel.addColumn("Год");
         tableModel.addColumn("Объем ежегодного потребления, т.");
-    for (Map.Entry<String, Map<String, Map<Integer, Double>>> ownerEntry : result.entrySet()) {
-        String owner = ownerEntry.getKey();
-        Map<String, Map<Integer, Double>> operatorMap = ownerEntry.getValue();
-        for (Map.Entry<String, Map<Integer, Double>> operatorEntry : operatorMap.entrySet()) {
-            String operator = operatorEntry.getKey();
-            Map<Integer, Double> dataByYear = operatorEntry.getValue();
-            for (Map.Entry<Integer, Double> yearData : dataByYear.entrySet()) {
-                Object[] rowData = {owner, operator, yearData.getKey(), yearData.getValue()};
-                tableModel.addRow(rowData);
-            }
-        }
+
+        return createRows(tableModel,result);
     }
-        return tableModel;
+    public DefaultTableModel createTableForOwner(Map<String, Map<Integer, Double>> result) {
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Владелец");
+        tableModel.addColumn("Год");
+        tableModel.addColumn("Объем ежегодного потребления, т.");
+
+        return createRows(tableModel,result);
     }
+
 }

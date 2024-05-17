@@ -128,8 +128,11 @@
                       <Component id="buttonAgredationByCountry" alignment="0" min="-2" pref="173" max="-2" attributes="0"/>
                       <Component id="textAddedFilesScroll" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="buttonCreateBd" alignment="0" min="-2" pref="182" max="-2" attributes="0"/>
-                      <Component id="buttonAgregationByRegions" alignment="0" min="-2" pref="195" max="-2" attributes="0"/>
-                      <Component id="buttonAgregationByCompany" alignment="0" min="-2" pref="189" max="-2" attributes="0"/>
+                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="buttonAgregationByOwner" alignment="0" max="32767" attributes="0"/>
+                          <Component id="buttonAgregationByOperator" alignment="0" max="32767" attributes="0"/>
+                          <Component id="buttonAgregationByRegions" alignment="0" pref="195" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jScrollPane2" pref="564" max="32767" attributes="0"/>
@@ -158,8 +161,10 @@
                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   <Component id="buttonAgregationByRegions" min="-2" pref="41" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="buttonAgregationByCompany" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="66" max="32767" attributes="0"/>
+                  <Component id="buttonAgregationByOperator" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="buttonAgregationByOwner" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="27" max="32767" attributes="0"/>
               </Group>
               <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
           </Group>
@@ -252,12 +257,20 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="buttonAgregationByCompany">
+        <Component class="javax.swing.JButton" name="buttonAgregationByOperator">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&#x410;&#x433;&#x440;&#x435;&#x433;&#x430;&#x446;&#x438;&#x44f; &#x43f;&#x43e; &#x43a;&#x43e;&#x43c;&#x43f;&#x430;&#x43d;&#x438;&#x438;"/>
+            <Property name="text" type="java.lang.String" value="&#x410;&#x433;&#x440;&#x435;&#x433;&#x430;&#x446;&#x438;&#x44f; &#x43f;&#x43e; &#x43e;&#x43f;&#x435;&#x440;&#x430;&#x442;&#x43e;&#x440;&#x430;&#x43c;"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonAgregationByCompanyActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonAgregationByOperatorActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="buttonAgregationByOwner">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x410;&#x433;&#x440;&#x435;&#x433;&#x430;&#x446;&#x438;&#x44f; &#x43f;&#x43e; &#x432;&#x43b;&#x430;&#x434;&#x435;&#x43b;&#x44c;&#x446;&#x430;&#x43c;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonAgregationByOwnerActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

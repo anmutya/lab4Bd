@@ -4,17 +4,17 @@
  */
 package an_mutya.lab4Bd;
 
+import entities.Owners;
 import managers.Manager;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.BatchUpdateException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -60,7 +60,8 @@ public class MainFrame extends javax.swing.JFrame {
         buttonAgregationByRegions = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableResultAgregation = new javax.swing.JTable();
-        buttonAgregationByCompany = new javax.swing.JButton();
+        buttonAgregationByOperator = new javax.swing.JButton();
+        buttonAgregationByOwner = new javax.swing.JButton();
 
         treeDialog.setMinimumSize(new java.awt.Dimension(600, 600));
         treeDialog.setVisible(false);
@@ -160,10 +161,17 @@ public class MainFrame extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tableResultAgregation);
 
-        buttonAgregationByCompany.setText("Агрегация по компании");
-        buttonAgregationByCompany.addActionListener(new java.awt.event.ActionListener() {
+        buttonAgregationByOperator.setText("Агрегация по операторам");
+        buttonAgregationByOperator.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAgregationByCompanyActionPerformed(evt);
+                buttonAgregationByOperatorActionPerformed(evt);
+            }
+        });
+
+        buttonAgregationByOwner.setText("Агрегация по владельцам");
+        buttonAgregationByOwner.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAgregationByOwnerActionPerformed(evt);
             }
         });
 
@@ -185,8 +193,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(buttonAgredationByCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textAddedFilesScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonCreateBd, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonAgregationByRegions, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buttonAgregationByCompany, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLoadFileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(buttonAgregationByOwner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonAgregationByOperator, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonAgregationByRegions, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE))
         );
@@ -210,8 +220,10 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(buttonAgregationByRegions, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(buttonAgregationByCompany)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addComponent(buttonAgregationByOperator)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(buttonAgregationByOwner)
+                .addContainerGap(27, Short.MAX_VALUE))
             .addComponent(jScrollPane2)
         );
 
@@ -246,37 +258,43 @@ public class MainFrame extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Импортируйте правильный файл!\nНе умею с таким работать", "Алло!", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
+
         } catch (URISyntaxException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_buttonLoadFileActionPerformed
 
-    private void buildTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buildTreeActionPerformed
+    private void buildTreeActionPerformed(java.awt.event.ActionEvent evt) {                                          
         DefaultTreeModel model;
         DefaultMutableTreeNode node = manager.buildTree();
         model = (DefaultTreeModel) treeReactors.getModel();
         model.setRoot(node);
         treeReactors.setModel(model);
         treeDialog.setVisible(true);
-    }//GEN-LAST:event_buildTreeActionPerformed
+    }
 
-    private void buttonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteActionPerformed
+
+    private void buttonDeleteActionPerformed(java.awt.event.ActionEvent evt) {                                             
         manager.deleteFiles();
         textAddedFiles.setText("");
-    }//GEN-LAST:event_buttonDeleteActionPerformed
+    }
 
-    private void buttonCreateBdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCreateBdActionPerformed
+    private void buttonCreateBdActionPerformed(java.awt.event.ActionEvent evt) {                                               
         try {
             manager.exportToDB();
         } catch (ConstraintViolationException | IllegalStateException e) {
             JOptionPane.showMessageDialog(null, "Для Вас база данных уже заполнена:)", "Алло!", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-    }//GEN-LAST:event_buttonCreateBdActionPerformed
+    }
 
     private void buttonAgredationByCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAgredationByCountryActionPerformed
         try {
             DefaultTableModel model = new DefaultTableModel();
-            model = manager.createTableFromCounry();
+            model = manager.createTableForCounry();
             tableResultAgregation.setModel(model);
             validate();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -288,7 +306,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void buttonAgregationByRegionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAgregationByRegionsActionPerformed
         try {
             DefaultTableModel model = new DefaultTableModel();
-            model = manager.createTableFromRegion();
+            model = manager.createTableForRegion();
             tableResultAgregation.setModel(model);
             validate();
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -297,17 +315,30 @@ public class MainFrame extends javax.swing.JFrame {
         validate();
     }//GEN-LAST:event_buttonAgregationByRegionsActionPerformed
 
-    private void buttonAgregationByCompanyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAgregationByCompanyActionPerformed
+
+    private void buttonAgregationByOperatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAgregationByOperatorActionPerformed
         try {
             DefaultTableModel model = new DefaultTableModel();
-            model = manager.createTableFromOwnerAndOperator();
+            model = manager.createTableForOperator();
             tableResultAgregation.setModel(model);
             validate();
         } catch (ArrayIndexOutOfBoundsException e) {
             JOptionPane.showMessageDialog(null, "Надо бы загрузить один(или не один) файл\nФормата json,yaml или xml ", "Алло!", JOptionPane.INFORMATION_MESSAGE);
-        } 
+        }
         validate();
-    }//GEN-LAST:event_buttonAgregationByCompanyActionPerformed
+    }//GEN-LAST:event_buttonAgregationByOperatorActionPerformed
+
+    private void buttonAgregationByOwnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAgregationByOwnerActionPerformed
+                try {
+            DefaultTableModel model = new DefaultTableModel();
+            model = manager.createTableForOwner();
+            tableResultAgregation.setModel(model);
+            validate();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            JOptionPane.showMessageDialog(null, "Надо бы загрузить один(или не один) файл\nФормата json,yaml или xml ", "Алло!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        validate();
+    }//GEN-LAST:event_buttonAgregationByOwnerActionPerformed
 
     /**
      * @param args the command line arguments
@@ -347,7 +378,8 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buildTree;
     private javax.swing.JButton buttonAgredationByCountry;
-    private javax.swing.JButton buttonAgregationByCompany;
+    private javax.swing.JButton buttonAgregationByOperator;
+    private javax.swing.JButton buttonAgregationByOwner;
     private javax.swing.JButton buttonAgregationByRegions;
     private javax.swing.JButton buttonCreateBd;
     private javax.swing.JButton buttonDelete;

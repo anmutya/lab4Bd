@@ -132,17 +132,19 @@ public class EnergyCalculator {
         Map<Integer, Double> energyByYear = new HashMap<>();
         int shutdownYear = dataFormatToOnlyYear(reactor.getShutdownDate());
         int firstGridYear = dataFormatToOnlyYear(reactor.getFirstGridConnection());
-        for (Kium kium : reactor.getKiums()) {
-            double energy = 0;
-            double loadFactor = 0;
-            if (shutdownYear > kium.getYear() && firstGridYear < kium.getYear()) {
-                loadFactor = kium.getLoadFactor() == null ? 0.85 : kium.getLoadFactor() / 100;
-                energy = loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
-            } else if (firstGridYear == kium.getYear()) {
-                loadFactor = kium.getLoadFactor() == null ? findFirstLoad(reactor) : kium.getLoadFactor() / 100;
-                energy = 3 * loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
+        if(!reactor.getKiums().isEmpty()) {
+            for (Kium kium : reactor.getKiums()) {
+                double energy = 0;
+                double loadFactor = 0;
+                if (shutdownYear > kium.getYear() && firstGridYear < kium.getYear()) {
+                    loadFactor = kium.getLoadFactor() == null ? 0.85 : kium.getLoadFactor() / 100;
+                    energy = loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
+                } else if (firstGridYear == kium.getYear()) {
+                    loadFactor = kium.getLoadFactor() == null ? findFirstLoad(reactor) : kium.getLoadFactor() / 100;
+                    energy = 3 * loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
+                }
+                energyByYear.merge(kium.getYear(), energy, Double::sum);
             }
-            energyByYear.merge(kium.getYear(), energy, Double::sum);
         }
         return energyByYear;
     }

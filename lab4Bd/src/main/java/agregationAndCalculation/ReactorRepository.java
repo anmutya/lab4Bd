@@ -1,9 +1,5 @@
 package agregationAndCalculation;
-import entities.Countries;
-import entities.Operators;
-import entities.Owners;
-import entities.Reactors;
-import entities.Regions;
+import entities.*;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -41,24 +37,25 @@ public class ReactorRepository {
         return regions;
     }
 
-    public ArrayList<ArrayList<Reactors>> findReactorsByOwnerAndOperator() {
-        ArrayList<ArrayList<Reactors>> result = new ArrayList<>();
-        String hql = "select ow, op, count(r) as reactor_counts " +
-                "FROM Reactors r " +
-                "inner join r.owner ow " +
-                "inner join r.operator op " +
-                "group by op, ow " +
-                "order by reactor_counts desc";
+    public ArrayList<Operators> findReactorsByOperator() {
+        ArrayList<Operators> operators = new ArrayList<>();
+        String hql = "SELECT r " +
+                "FROM Operators r";
         Query<Object[]> query = session.createQuery(hql, Object[].class);
         for (Object[] row : query.list()) {
-            List<Reactors> owner_reactors = ((Owners) row[0]).getReactors();
-            List<Reactors> operator_reactors = ((Operators) row[1]).getReactors();
-            List<Reactors> reactors = owner_reactors.stream()
-                    .distinct()
-                    .filter(operator_reactors::contains)
-                    .toList();
-            result.add(new ArrayList<>(reactors));
+            operators.add((Operators) row[0]);
         }
-        return result;
+        return operators;
+    }
+    public ArrayList<Owners> findReactorsByOwner() {
+        ArrayList<Owners> owners = new ArrayList<>();
+        String hql = "SELECT ow " +
+                "FROM Owners ow "+
+                "inner join ow.ownersAndReactors";
+        Query<Object[]> query = session.createQuery(hql, Object[].class);
+        for (Object[] row : query.list()) {
+            owners.add((Owners) row[0]);
+        }
+        return owners;
     }
 }

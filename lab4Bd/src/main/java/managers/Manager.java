@@ -17,7 +17,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import handlers.JSONhandler;
 import handlers.XMLhandler;
 import handlers.YAMLhandler;
-import org.hibernate.Session;
 import reactor.ReactorStorage;
 import reader.JsonReader;
 import reader.XmlReader;
@@ -40,18 +39,32 @@ public class Manager {
         sessionManager.closeSession();
     }
 
-    public DefaultTableModel createTableFromCounry(){  
+    public DefaultTableModel createTableForCounry() {
         TableBuilder builder = new TableBuilder();
-        return builder.createTableFromCounry(agregationByCountry());
+        return builder.createTableForCounry(agregationByCountry());
     }
-    public DefaultTableModel createTableFromRegion() {  
+
+    public DefaultTableModel createTableForRegion() {
         TableBuilder builder = new TableBuilder();
-        return builder.createTableFromRegion(agregationByRegion());
+        return builder.createTableForRegion(agregationByRegion());
     }
-    public DefaultTableModel createTableFromOwnerAndOperator() {  
+
+    public DefaultTableModel createTableForOperator() {
         TableBuilder builder = new TableBuilder();
-        return builder.createTableFromOwnersAndOperators(agregationByOwnerAndOperator());
+        return builder.createTableForOperator(agregationByOperators());
     }
+    public DefaultTableModel createTableForOwner() {
+        TableBuilder builder = new TableBuilder();
+        return builder.createTableForOwner(agregationByOwner());
+    }
+
+    private Map<String, Map<Integer, Double>> agregationByOwner() {
+        ReactorRepository reactorRepository = new ReactorRepository(sessionManager.getSession());
+        ReactorService reactorService = new ReactorService(reactorRepository);
+        Map<String, Map<Integer, Double>> result = reactorService.calculateReactorEnergyByOwner();
+        return result;
+    }
+
     private Map<String, Map<Integer, Double>> agregationByCountry() {
         ReactorRepository reactorRepository = new ReactorRepository(sessionManager.getSession());
         ReactorService reactorService = new ReactorService(reactorRepository);
@@ -59,35 +72,37 @@ public class Manager {
         return result;
     }
 
-    public Map<String, Map<String, Map<Integer, Double>>> agregationByOwnerAndOperator() {
+    private Map<String, Map<Integer, Double>> agregationByOperators() {
         ReactorRepository reactorRepository = new ReactorRepository(sessionManager.getSession());
         ReactorService reactorService = new ReactorService(reactorRepository);
-        Map<String, Map<String, Map<Integer, Double>>> result = reactorService.calculateReactorEnergyByOwnerAndOperator();
+        Map<String, Map<Integer, Double>> result = reactorService.calculateReactorEnergyByOperator();
         return result;
     }
 
+//    public Map<String, Map<String, Map<Integer, Double>>> agregationByOwnerAndOperator() {
+//        ReactorRepository reactorRepository = new ReactorRepository(sessionManager.getSession());
+//        ReactorService reactorService = new ReactorService(reactorRepository);
+//        Map<String, Map<String, Map<Integer, Double>>> result = reactorService.calculateReactorEnergyByOwnerAndOperator();
+//        return result;
+//    }
+
     public Map<String, Map<Integer, Double>> agregationByRegion() {
-        ReactorRepository reactorRepository = new ReactorRepository( sessionManager.getSession());
+        ReactorRepository reactorRepository = new ReactorRepository(sessionManager.getSession());
         ReactorService reactorService = new ReactorService(reactorRepository);
         Map<String, Map<Integer, Double>> result = reactorService.calculateReactorEnergyByRegionAndYear();
         return result;
     }
 
-    public void exportToDB() {
+    public void exportToDB() throws SQLException, IOException {
         ExportEntitiesToDB exportEntitiesToDB = new ExportEntitiesToDB();
-        try {
-            exportEntitiesToDB.extortStatusToDB(sessionManager.getSession(), entities.readStatusForExcel());
-            exportEntitiesToDB.extortRegionsToDB(sessionManager.getSession(), entities.readRegionsForExcel());
-            exportEntitiesToDB.extortCountriesToDB(sessionManager.getSession(), entities.readCountriesForExcel());
-            exportEntitiesToDB.extortOperatorsToDB(sessionManager.getSession(), entities.readOperatorsForExcel());
-            exportEntitiesToDB.extortOwnersToDB(sessionManager.getSession(), entities.readOwnersForExcel());
-            exportEntitiesToDB.extortReactorsToDB(sessionManager.getSession(), entities.readReactorsForExcel());
-            exportEntitiesToDB.extortKiumsToDB(sessionManager.getSession(), entities.readKiumForExcel());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        exportEntitiesToDB.extortStatusToDB(sessionManager.getSession(), entities.readStatusForExcel());
+//        exportEntitiesToDB.extortRegionsToDB(sessionManager.getSession(), entities.readRegionsForExcel());
+//        exportEntitiesToDB.extortCountriesToDB(sessionManager.getSession(), entities.readCountriesForExcel());
+//        exportEntitiesToDB.extortOperatorsToDB(sessionManager.getSession(), entities.readOperatorsForExcel());
+//        exportEntitiesToDB.extortOwnersToDB(sessionManager.getSession(), entities.readOwnersForExcel());
+//        exportEntitiesToDB.extortReactorsToDB(sessionManager.getSession(), entities.readReactorsForExcel());
+        exportEntitiesToDB.extortKiumsToDB(sessionManager.getSession(), entities.readKiumForExcel());
+        exportEntitiesToDB.extortOwnersAndReactorsToDB(sessionManager.getSession(), entities.readOwnersAndReactorsForExcel());
     }
 
     public void loadFile(String path) {

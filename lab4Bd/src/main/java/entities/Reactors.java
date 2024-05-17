@@ -33,9 +33,9 @@ public class Reactors {
         this.energyByYear = energyByYear;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
-    private Owners owner;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "owner_id")
+//    private Owners owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operator_id")
@@ -51,9 +51,26 @@ public class Reactors {
     @JoinColumn(name = "country_id")
     private Countries country;
 
+//    public Owners getOwner() {
+//        return owner;
+//    }
+//
+//    public void setOwner(Owners owner) {
+//        this.owner = owner;
+//    }
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reactor")
     private List<Kium> kiums;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reactor")
+    private List<OwnersAndReactors> ownersAndReactors;
 
+    public List<OwnersAndReactors> getOwnersAndReactors() {
+        return ownersAndReactors;
+    }
+
+    public void setOwnersAndReactors(List<OwnersAndReactors> ownersAndReactors) {
+        this.ownersAndReactors = ownersAndReactors;
+    }
 
     public List<Kium> getKiums() {
         return kiums;
@@ -109,13 +126,6 @@ public class Reactors {
         this.status = status;
     }
 
-    public Owners getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owners owner) {
-        this.owner = owner;
-    }
 
     public Operators getOperator() {
         return operator;

@@ -1,9 +1,7 @@
 package agregationAndCalculation;
 
 
-import entities.Countries;
-import entities.Reactors;
-import entities.Regions;
+import entities.*;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -64,23 +62,40 @@ public class ReactorService {
         return energyByCountryAndYear;
     }
 
-    public Map<String, Map<String, Map<Integer, Double>>> calculateReactorEnergyByOwnerAndOperator() {
+    public Map<String, Map<Integer, Double>> calculateReactorEnergyByOperator() {
         EnergyCalculator energyCalculator = new EnergyCalculator();
-        ArrayList<ArrayList<Reactors>> results = reactorRepository.findReactorsByOwnerAndOperator();
-        Map<String, Map<String, Map<Integer, Double>>> energyByCountryAndYear = new HashMap<>();
-        for (ArrayList<Reactors> reactors : results) {
-            String ownerName = reactors.get(0).getOwner().getName();
-            String operatorName = reactors.get(0).getOperator().getName();
-            Map<Integer, Double> energyForRegion = energyCalculator.calculateEnergy(reactors);
-            energyByCountryAndYear
-                    .computeIfAbsent(ownerName, k -> new HashMap<>())
-                    .computeIfAbsent(operatorName, k -> new HashMap<>())
-                    .putAll(energyForRegion);
+        ArrayList<Operators> results = reactorRepository.findReactorsByOperator();
+        Map<String, Map<Integer, Double>> energyByCountryAndYear = new HashMap<>();
+        for (Operators operator : results) {
+            List<Reactors> reactors = operator.getReactors();
+            Map<Integer, Double> energyForCountry = energyCalculator.calculateEnergy(reactors);
+            energyByCountryAndYear.put(operator.getName(), energyForCountry);
         }
-        energyByCountryAndYear.forEach((owner, operatorToEnergyMap)
-                -> operatorToEnergyMap.forEach((operator, yearToEnergy)
-                        -> yearToEnergy.forEach((year, energy)
-                        -> System.out.println("Owner: " + owner + ", Operator: " + operator + ", Year: " + year + ", Energy: " + energy))));
-        return energyByCountryAndYear;
+        Map<String, Map<Integer, Double>> sortedMapByYear = sortedMapByYear(energyByCountryAndYear);
+        sortedMapByYear.forEach((operator, yearToEnergy)
+                -> yearToEnergy.forEach((year, energy)
+                -> System.out.println("Operator: " + operator + ", Year: " + year + ", Energy: " + energy)));
+        return sortedMapByYear;
+    }
+
+    public Map<String, Map<Integer, Double>> calculateReactorEnergyByOwner() {
+        EnergyCalculator energyCalculator = new EnergyCalculator();
+        ArrayList<Owners> results = reactorRepository.findReactorsByOwner();
+        Map<String, Map<Integer, Double>> energyByCountryAndYear = new HashMap<>();
+        for (Owners owner : results) {
+            List<OwnersAndReactors> ownerAndReactors = owner.getOwnersAndReactors();
+            List<Reactors> reactors = new ArrayList<>();
+            for (OwnersAndReactors ownerAndReactor : ownerAndReactors) {
+                Reactors reactor = ownerAndReactor.getReactor();
+                reactors.add(reactor);
+            }
+            Map<Integer, Double> energyForOwner = energyCalculator.calculateEnergy(reactors);
+            energyByCountryAndYear.put(owner.getName(), energyForOwner);
+        }
+        Map<String, Map<Integer, Double>> sortedMapByYear = sortedMapByYear(energyByCountryAndYear);
+        sortedMapByYear.forEach((owner, yearToEnergy)
+                -> yearToEnergy.forEach((year, energy)
+                -> System.out.println("Owner: " + owner + ", Year: " + year + ", Energy: " + energy)));
+        return sortedMapByYear;
     }
 }
