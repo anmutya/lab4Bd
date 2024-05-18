@@ -56,8 +56,7 @@ public class EnergyCalculator {
                 double loadFactor = 0.85;
                 energy = loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
             } else if (firstGridYear == year) {
-                double loadFactor = findFirstLoad(reactor);
-                energy = loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
+                energy = findFirstLoad(reactor);
             } else {
                 energy = 0;
             }
@@ -139,11 +138,16 @@ public class EnergyCalculator {
                 double energy = 0;
                 double loadFactor = 0;
                 if (shutdownYear > kium.getYear() && firstGridYear < kium.getYear()) {
-                    loadFactor = kium.getLoadFactor() == null ? 0.85 : kium.getLoadFactor() / 100;
+                    loadFactor = kium.getLoadFactor() == null ? 0.85 : kium.getLoadFactor()/100;
                     energy = loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
                 } else if (firstGridYear == kium.getYear()) {
-                    loadFactor = kium.getLoadFactor() == null ? findFirstLoad(reactor) : kium.getLoadFactor() / 100;
-                    energy = 3 * loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
+                    if(kium.getLoadFactor() == null){
+                        energy = findFirstLoad(reactor);
+                    }
+                    else {
+                        loadFactor = kium.getLoadFactor();
+                        energy = 3 * loadFactor * reactor.getThermalCapacity() / findBurnup(reactor);
+                    }
                 }
                 energyByYear.merge(kium.getYear(), energy, Double::sum);
             }
